@@ -1,5 +1,6 @@
 # Developer Evaluation Project
- 
+
+`READ CAREFULLY`
 
 ## Instructions
 **The test below will have up to 7 calendar days to be delivered from the date of receipt of this manual.**
@@ -8,7 +9,7 @@
 - Upload this template to your repository and start working from it
 - Read the instructions carefully and make sure all requirements are being addressed
 - The repository must provide instructions on how to configure, execute and test the project
-- Preare a Documentation in the end
+- Documentation and overall organization will also be taken into consideration
 
 ## Use Case
 **You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
@@ -29,13 +30,13 @@ Therefore, you will write an API (complete CRUD) that handles sales records. The
 * Total amount for each item
 * Cancelled/Not Cancelled
 
-build code for publishing events of:
+It's not mandatory, but it would be a differential to build code for publishing events of:
 * SaleCreated
 * SaleModified
 * SaleCancelled
 * ItemCancelled
 
-publish events using RabbitMQ and log a message in the application log 
+If you write the code, **it's not required** to actually publish to any Message Broker. You can log a message in the application log or however you find most convenient.
 
 ### Business Rules
 
@@ -57,7 +58,7 @@ These business rules define quantity-based discounting tiers and limitations:
 # DeveloperStore Project Documentation
 
 ## Overview
-DeveloperStore is a backend project designed to manage sales records and support operations like creating, updating, and canceling sales. It integrates key concepts like Domain-Driven Design (DDD) and event publishing to simulate real-world complexities. This project serves as a developer evaluation platform to assess competencies in:
+DeveloperStore is a backend project designed to manage sales records and support operations like creating, updating, and canceling sales. It integrates key concepts like Domain-Driven Design (DDD) and event publishing to simulate real-world complexities. It includes competencies in:
 - Designing and implementing APIs.
 - Applying business rules effectively.
 - Leveraging event-driven architecture (RabbitMQ).
@@ -112,7 +113,7 @@ Clone the repository to your local machine and navigate into the project folder:
 Run the following command:
 
 ```
-git clone https://github.com/your-repository/DeveloperStore.git
+git clone https://github.com/bortot-systems/DeveloperStore.git
 cd DeveloperStore
 ```
 
