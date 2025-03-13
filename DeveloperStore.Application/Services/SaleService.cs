@@ -3,6 +3,7 @@ using DeveloperStore.Domain.Entities;
 using DeveloperStore.Domain.Repositories;
 using DeveloperStore.Domain.ValueObjects;
 using DeveloperStore.Shared.DTOs;
+using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 
 namespace DeveloperStore.Application.Services
@@ -11,11 +12,13 @@ namespace DeveloperStore.Application.Services
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IRabbitMQPublisher _rabbitMQPublisher;
+        private readonly ILogger<SaleService> _logger;
 
-        public SaleService(ISaleRepository saleRepository, IRabbitMQPublisher rabbitMQPublisher)
+        public SaleService(ISaleRepository saleRepository, IRabbitMQPublisher rabbitMQPublisher, ILogger<SaleService> logger)
         {
             _saleRepository = saleRepository;
             _rabbitMQPublisher = rabbitMQPublisher;
+            _logger = logger;
         }
 
         public async Task<SaleDto> GetSaleByIdAsync(Guid saleId)
@@ -98,7 +101,11 @@ namespace DeveloperStore.Application.Services
         public async Task<bool> UpdateSaleAsync(Guid saleId, SaleDto saleDto)
         {
             var sale = await _saleRepository.GetByIdAsync(saleId);
-            if (sale == null) return false;
+            if (sale == null)
+            {
+                _logger.LogWarning($"Sale with ID {saleId} not found for update.");
+                return false;
+            }
 
             sale.UpdateDetails(
                 saleDto.SaleNumber,
@@ -123,6 +130,7 @@ namespace DeveloperStore.Application.Services
                 var saleItem = new SaleItem(productReference, itemDto.Quantity, itemDto.UnitPrice, out var errorMessage);
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
+                    _logger.LogError(errorMessage);
                     throw new ValidationException(errorMessage);
                 }
                 sale.AddItem(saleItem);
@@ -138,11 +146,17 @@ namespace DeveloperStore.Application.Services
         public async Task CancelSaleAsync(Guid saleId)
         {
             var sale = await _saleRepository.GetByIdAsync(saleId);
-            if (sale == null) throw new Exception("Sale not found.");
+            if (sale == null)
+            {
+                _logger.LogWarning($"Sale not found.");
+                throw new Exception("Sale not found.");
+            }
 
             sale.Cancel();
 
             await _saleRepository.UpdateAsync(sale);
+
+            _logger.LogInformation($"Sale with ID {saleId} has been canceled.");
 
             await _rabbitMQPublisher.PublishAsync("SaleCancelled", sale);
         }

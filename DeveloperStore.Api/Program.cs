@@ -9,6 +9,10 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Log4Net
+builder.Logging.ClearProviders();
+builder.Logging.AddLog4Net("log4net.config");
+
 // Configure services
 builder.Services.AddDbContext<SalesDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

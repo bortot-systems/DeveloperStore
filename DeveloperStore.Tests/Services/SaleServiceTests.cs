@@ -3,6 +3,7 @@ using DeveloperStore.Application.Services;
 using DeveloperStore.Domain.Entities;
 using DeveloperStore.Domain.Repositories;
 using DeveloperStore.Shared.DTOs;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace DeveloperStore.Tests.Services
@@ -11,13 +12,15 @@ namespace DeveloperStore.Tests.Services
     {
         private readonly Mock<ISaleRepository> _saleRepositoryMock;
         private readonly Mock<IRabbitMQPublisher> _rabbitMQPublisherMock;
+        private readonly Mock<ILogger<SaleService>> _loggerMock;
         private readonly ISaleService _saleService;
 
         public SaleServiceTests()
         {
             _saleRepositoryMock = new Mock<ISaleRepository>();
             _rabbitMQPublisherMock = new Mock<IRabbitMQPublisher>();
-            _saleService = new SaleService(_saleRepositoryMock.Object, _rabbitMQPublisherMock.Object);
+            _loggerMock = new Mock<ILogger<SaleService>>();
+            _saleService = new SaleService(_saleRepositoryMock.Object, _rabbitMQPublisherMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -58,6 +61,15 @@ namespace DeveloperStore.Tests.Services
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => _saleService.CancelSaleAsync(saleId));
+
+            // Verify logger
+            _loggerMock.Verify(x => x.Log(
+            LogLevel.Warning,
+            It.IsAny<EventId>(),
+            It.Is<It.IsAnyType>((v, t) => v.ToString().Contains($"Sale not found.")),
+            It.IsAny<Exception>(),
+            It.Is<Func<It.IsAnyType, Exception, string>>((v, t) => true)),
+            Times.Once);
         }
     }
 }

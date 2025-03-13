@@ -1,0 +1,100 @@
+Example input POST:
+
+{  
+  "saleNumber": "INV-20250303",
+  "customerId": "a9b4d661-f123-49cc-85b8-d821c2f94bf5",
+  "branch": "Uptown Store",
+  "items": [
+    {
+      "productId": "a1b2c3d4-e5f6-7890-1234-56789abcdef0",
+      "quantity": 5,
+      "unitPrice": 20.00
+    },
+    {
+      "productId": "123e4567-e89b-12d3-a456-426614174000",
+      "quantity": 1,
+      "unitPrice": 499.99
+    }
+  ]
+}
+------------
+* Purchases above 4 identical items have a 10% discount
+{
+  "saleId": "f72a8b33-7bc9-489a-84a6-d9e0f0f72e10",
+  "saleNumber": "INV-20250304",
+  "customerId": "a9b4d661-f123-49cc-85b8-d821c2f94bf5",
+  "branch": "Uptown Store",
+  "items": [
+    {
+      "productId": "b23aa10b-58cc-4372-a567-0e02b2c3d400",
+      "quantity": 5,
+      "unitPrice": 50.00
+    },
+    {
+      "productId": "c34bb10b-58cc-4372-a567-0e02b2c3d401",
+      "quantity": 1,
+      "unitPrice": 499.99
+    }
+  ]
+}
+----------------
+* Purchases between 10 and 20 identical items have a 20% discount
+
+{
+  "saleId": "d41f2ae8-7c54-4b98-b243-289d72982311",
+  "saleNumber": "INV-20250306",
+  "customerId": "b72f12b1-34ac-44df-91b9-a2c492fbde4f",
+  "branch": "Central Store",
+  "items": [
+    {
+      "productId": "a123bc45-def6-7890-1234-5678abcdef90",
+      "quantity": 12,
+      "unitPrice": 30.00
+    },
+    {
+      "productId": "b456cd78-ef90-1234-5678-9abcdef01234",
+      "quantity": 5,
+      "unitPrice": 100.00
+    }
+  ]
+}
+------------------
+* It's not possible to sell above 20 identical items
+
+{
+  "saleNumber": "INV-20250311",
+  "customerId": "c12ab34d-567e-8f90-1234-5abc678def90",
+  "branch": "Central Store",
+  "items": [
+    {
+      "productId": "a123bc45-def6-7890-1234-5678abcdef90",
+      "productName": "Gaming Laptop",
+      "quantity": 25,
+      "unitPrice": 1500.00
+    }
+  ]
+}
+
+
+
+---
+PUT
+
+{
+  "saleId": "0d881659-fd22-4bd8-9037-8baa3f96c6c9",
+  "saleNumber": "INV-20250306",
+  "customerId": "b72f12b1-34ac-44df-91b9-a2c492fbde4f",
+  "branch": "Central Store",
+  "items": [
+    {
+      "productId": "a123bc45-def6-7890-1234-5678abcdef90",
+      "quantity": 12,
+      "unitPrice": 30.00
+    },
+    {
+      "productId": "b456cd78-ef90-1234-5678-9abcdef01234",
+      "quantity": 9,
+      "unitPrice": 100.00
+    }
+  ]
+}

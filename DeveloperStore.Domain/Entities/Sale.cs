@@ -1,9 +1,8 @@
-﻿using DeveloperStore.Domain.Exceptions;
-using DeveloperStore.Domain.ValueObjects;
+﻿using DeveloperStore.Domain.ValueObjects;
 
 namespace DeveloperStore.Domain.Entities
 {
-    public class Sale //: AggregateRoot
+    public class Sale
     {
         public Guid SaleId { get; private set; }
         public string SaleNumber { get; private set; }
@@ -29,7 +28,7 @@ namespace DeveloperStore.Domain.Entities
         public void AddItem(SaleItem item)
         {
             if (item.Quantity > 20)
-                throw new DomainException("Cannot sell more than 20 identical items.");
+                throw new Exception("Cannot sell more than 20 identical items.");
 
             _items.Add(item);
         }

@@ -1,6 +1,5 @@
 # Developer Evaluation Project
-
-`READ CAREFULLY`
+ 
 
 ## Instructions
 **The test below will have up to 7 calendar days to be delivered from the date of receipt of this manual.**
