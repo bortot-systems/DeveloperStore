@@ -14,10 +14,11 @@ namespace DeveloperStore.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(Sale sale)
+        public async Task<IEnumerable<Sale>> GetAllAsync()
         {
-            await _context.Sales.AddAsync(sale);
-            await _context.SaveChangesAsync();
+            return await _context.Sales
+                .Include(s => s.Items)
+                .ToListAsync();
         }
 
         public async Task<Sale> GetByIdAsync(Guid id)
@@ -25,6 +26,12 @@ namespace DeveloperStore.Infrastructure.Repositories
             return await _context.Sales
                 .Include(s => s.Items)
                 .FirstOrDefaultAsync(s => s.SaleId == id);
+        }
+
+        public async Task AddAsync(Sale sale)
+        {
+            await _context.Sales.AddAsync(sale);
+            await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Sale sale)

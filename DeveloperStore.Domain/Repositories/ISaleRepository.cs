@@ -4,8 +4,10 @@ namespace DeveloperStore.Domain.Repositories
 {
     public interface ISaleRepository
     {
-        Task AddAsync(Sale sale);
+        Task<IEnumerable<Sale>> GetAllAsync();
         Task<Sale> GetByIdAsync(Guid id);
+        Task AddAsync(Sale sale);
         Task UpdateAsync(Sale sale);
+
     }
 }

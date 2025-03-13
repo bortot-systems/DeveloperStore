@@ -21,11 +21,26 @@ namespace DeveloperStore.Application.Services
             _logger = logger;
         }
 
+        public async Task<IEnumerable<SaleDto>> GetSalesAsync()
+        {
+            var sales = await _saleRepository.GetAllAsync();
+            return sales.Select(MapSaleToDto);
+        }
+
         public async Task<SaleDto> GetSaleByIdAsync(Guid saleId)
         {
             var sale = await _saleRepository.GetByIdAsync(saleId);
-            if (sale == null) return null;
+            if (sale == null)
+            {
+                _logger.LogWarning($"Sale with ID {saleId} not found");
+                return null;
+            }
 
+            return MapSaleToDto(sale);
+        }
+
+        private SaleDto MapSaleToDto(Sale sale)
+        {
             return new SaleDto
             {
                 SaleId = sale.SaleId,
@@ -148,8 +163,9 @@ namespace DeveloperStore.Application.Services
             var sale = await _saleRepository.GetByIdAsync(saleId);
             if (sale == null)
             {
-                _logger.LogWarning($"Sale not found.");
-                throw new Exception("Sale not found.");
+                string msg = $"Sale not found.";
+                _logger.LogWarning(msg);
+                throw new Exception(msg);
             }
 
             sale.Cancel();

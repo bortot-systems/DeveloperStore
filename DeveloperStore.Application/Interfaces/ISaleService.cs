@@ -4,6 +4,7 @@ namespace DeveloperStore.Application.Interfaces
 {
     public interface ISaleService
     {
+        Task<IEnumerable<SaleDto>> GetSalesAsync();
         Task<SaleDto> GetSaleByIdAsync(Guid saleId);
         Task<SaleDto> CreateSaleAsync(SaleDto saleDto);
         Task<bool> UpdateSaleAsync(Guid saleId, SaleDto saleDto);

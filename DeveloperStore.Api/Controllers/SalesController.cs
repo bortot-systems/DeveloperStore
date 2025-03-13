@@ -15,6 +15,13 @@ namespace DeveloperStore.Api.Controllers
             _saleService = saleService;
         }
 
+        [HttpGet("sales")]
+        public async Task<IActionResult> GetSales()
+        {
+            var sales = await _saleService.GetSalesAsync();
+            return Ok(sales);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
